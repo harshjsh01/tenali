@@ -26,7 +26,7 @@ The student should be able to finish the chapter purely by working through the l
 
 ## File layout & integration
 
-- All chapter modules live inside `client/src/App.jsx` (the same monolithic file as the rest of the app — do not split into new files).
+- Follow the modular development policy: place the chapter component in a dedicated file under `client/src/apps/ChapterNApp.jsx` (e.g. `client/src/apps/Chapter7App.jsx`), rather than appending monolithic bodies into `App.jsx`. In `App.jsx`, import it via `import ChapterNApp from './apps/ChapterNApp.jsx'`.
 - Each chapter is a single function component named `ChapterNApp({ onBack })` (e.g. `Chapter5App`, `Chapter6App`).
 - Helpers and lesson data go *immediately above* the component, prefixed with `chN_` (e.g. `ch6_parseFrac`, `CH6_LESSONS`).
 - Each chapter is wired into the URL router by adding a branch in `App()`:
