@@ -1,3 +1,11 @@
+# Feature BC: Conceptual MCQ Variants — Version History Log
+
+**Author**: Bithika Jain (@Bithika-Jain)  
+**Feature Code**: Feature BC  
+**Related Docs**: [Design Rationale](rationale.md) | [Extension Guide](extending.md)
+
+---
+
 # Feature BC: Version 0.1 - Initial Directory Setup & Database Schema
 **Author**: Bithika Jain (@Bithika-Jain)
 
@@ -6,12 +14,12 @@ Establish the storage structure, directory hierarchy, and JSON schema validation
 
 ## Key Decisions
 - **Isolated Question Storage**
-  - Stored questions inside a dedicated root directory (`conceptual/questions/`) rather than nested in server utilities, keeping the DB queries isolated.
+  - Stored questions inside a dedicated directory (`server/conceptual/questions/`) rather than nested in server utilities, keeping the DB queries isolated.
 - **Strict JSON Schema**
   - Defined a static structure containing unique `id`, `topic`, `question`, `options` (an array of exactly 4 strings), `answerOption` (A-D), `answerText`, and a detailed `explanation`.
 
 ## Implementation
-- Added `conceptual/questions/` directory.
+- Added `server/conceptual/questions/` directory.
 - Added draft schema files.
 
 ## Status
@@ -241,8 +249,8 @@ Replicate MCQ behaviors for custom quiz components and seed initial question dat
 
 ## Implementation
 - Modified `client/src/App.jsx` to integrate MCQ checks inside `FractionAddApp`.
-- Added 10 JSON database files under `conceptual/questions/`.
-- Added `DESIGN_RATIONALE.md` and `HOWTO_EXTEND.md`.
+- Added 10 JSON database files under `server/conceptual/questions/`.
+- Added `rationale.md` and `extending.md`.
 
 ## Status
 
@@ -271,7 +279,7 @@ Superseded by
 The Conceptual MCQ Variants feature integrates conceptual multiple-choice check-ins directly into adaptive math quizzes. It checks student comprehension of core math rules, definitions, and theorems (e.g., fraction division, negative/zero indices) rather than just mechanical calculations, triggering checkpoints at milestone intervals (such as every 5th question or level promotion). If a conceptual database is missing, the system gracefully falls back to standard calculation questions.
 
 ## Final Architecture (v1.0)
-- **Component 1: Cached JSON Databases (`conceptual/questions/*.json`)**: Statically defined question banks representing 6 initial topics.
+- **Component 1: Cached JSON Databases (`server/conceptual/questions/*.json`)**: Statically defined question banks representing 6 initial topics.
 - **Component 2: Server API Endpoints (`server/index.js`)**: Startup database loader cache, `GET /conceptual-api/question` resolving parameters, and `POST /conceptual-api/check` validation route.
 - **Component 3: Interactive MCQ Quiz Components (`client/src/App.jsx`)**: Adaptable UI option cards (A-D) and keydown listeners mapped in both the generated quiz app factory (`makeQuizApp`) and custom quiz modules (`FractionAddApp`).
 - **Data flow**: Client detects adaptive milestone -> queries `/conceptual-api/question` -> displays options layout -> submits selected choice to `/conceptual-api/check` -> reveals validation feedback and step explanation.
@@ -284,7 +292,7 @@ The Conceptual MCQ Variants feature integrates conceptual multiple-choice check-
 - Initial concept of introducing conceptual math questions.
 
 ### v0.1
-- Established root folder `conceptual/questions/` and defined the strict JSON question schema (`id`, `topic`, `question`, `options`, `answerOption`, `answerText`, `explanation`).
+- Established folder `server/conceptual/questions/` and defined the strict JSON question schema (`id`, `topic`, `question`, `options`, `answerOption`, `answerText`, `explanation`).
 
 ### v0.2
 - Implemented startup caching in `server/index.js` via the `loadConceptual` indexer, storing parsed files into memory.
@@ -337,10 +345,8 @@ The feature evolved from an initial concept of separate quizzes to an integrated
 ## Verification
 
 ### Automated Tests
-- Checked backend database loads and route responses via unit scripts:
-  `node test_quick.js` (all tests passed).
-- Built production client package:
-  `npm run build` (successful compilation without errors/warnings).
+- Checked backend database loads and route responses via unit scripts.
+- Built production client package: `npm run build` (successful compilation without errors/warnings).
 
 ### Manual Verification Steps
 1. Open the adaptive quiz dashboard and initiate the Fraction Addition quiz.
@@ -361,7 +367,7 @@ The feature evolved from an initial concept of separate quizzes to an integrated
 ---
 
 ## Feature Demo
-*Note: To avoid bloating the repository clone size with large binary files (images/videos), demo media assets are not committed directly to the git source repository. Instead, they are uploaded directly in the Pull Request description.*
+*Note: Demo media assets are uploaded directly in the GitHub Pull Request description.*
 
 - **Screenshot & Video Demo**: Available directly inside the GitHub Pull Request description.
 

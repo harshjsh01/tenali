@@ -1,12 +1,12 @@
 # Tenali UI Guidelines & Design System
 
-Tenali focuses on a **minimalistic, cognitive-load-aware UI** (refer to `docs/problem-statements.md` for the underlying pedagogical research). To ensure a consistent look and feel across features built by different contributors, you must strictly follow this design system and use the centralized CSS tokens.
+Tenali focuses on a **minimalistic, cognitive-load-aware UI** (refer to [`docs/specs/problem-statements.md`](../specs/problem-statements.md) for the underlying pedagogical research). To ensure a consistent look and feel across features built by different contributors and agents, you must strictly follow this design system and use the centralized CSS tokens.
 
 ---
 
 ## 1. Design System Tokens (CSS Variables)
 
-All UI elements must utilize these global custom CSS variables instead of hardcoded hex colors, margins, font sizes, or transition values.
+All UI elements must utilize these global custom CSS variables (defined in `client/src/App.css`) instead of hardcoded hex colors, arbitrary margins, font sizes, or transition values.
 
 ### Typography
 - **Headings & Display:** `var(--font-display)` (`'Source Serif 4', Georgia, serif`) — Use for screen titles, headings, and conceptual emphasis.
@@ -53,11 +53,69 @@ Tenali features a default **Dark theme** with a toggleable **Light theme**. The 
 
 ---
 
-## 3. Reusable UI Components
+## 3. Component Styling Patterns
 
-To maintain consistency, **do not write raw HTML elements** for core interactions. Always use the predefined UI components from `client/src/components/ui/`:
+Tenali utilizes CSS design tokens and modular CSS styles. When creating new components under `client/src/apps/<module>/` or `client/src/components/`, structure them using these consistent styling patterns:
 
-- **`<Button />`**: Supports `primary`, `secondary`, and `danger` variants with standard shadows, border radius, and hover styles.
-- **`<Card />`**: Establishes standard container styles with correct padding and shadows.
-- **`<Modal />`**: Built-in backdrop transitions, keyboard/click-away close options, and header formatting.
-- **`<Input />`**: Consistent styling for text/number entry, showing active outline focus using accent colors.
+### Primary and Secondary Buttons
+```css
+.btn-primary {
+  background: var(--clr-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  box-shadow: var(--shadow-btn);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--clr-surface);
+  color: var(--clr-text);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-family: var(--font-body);
+  transition: var(--transition);
+  cursor: pointer;
+}
+```
+
+### Cards and Interactive Panels
+```css
+.card-panel {
+  background: var(--clr-card);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  color: var(--clr-text);
+}
+```
+
+### Input Fields
+```css
+.input-control {
+  background: var(--clr-input);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  color: var(--clr-text);
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  outline: none;
+  transition: var(--transition);
+}
+
+.input-control:focus {
+  border-color: var(--clr-accent);
+  box-shadow: 0 0 0 2px var(--clr-accent-soft);
+}
+```

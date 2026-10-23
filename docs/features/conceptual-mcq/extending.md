@@ -16,13 +16,13 @@ Identify the internal ID of the topic you want to extend. This ID corresponds to
 - `stats` (Statistics)
 - `vectors` (Vectors)
 - `matrix` (Matrices)
-- `integration` (Integ)
+- `integration` (Integration)
 
 ---
 
 ## Step 2: Create the JSON Database File
 Create a new JSON file named `<topic_id>.json` inside the conceptual questions directory:
-📂 `conceptual/questions/`
+📂 `server/conceptual/questions/`
 
 ### JSON Structure & Schema
 Populate the file with an array of question objects following this exact schema:
@@ -61,7 +61,7 @@ Populate the file with an array of question objects following this exact schema:
 The backend loads and indexes all JSON databases into memory at startup. Restart the server by running:
 
 ```powershell
-node index.js
+node server/index.js
 ```
 
 ---
@@ -72,3 +72,9 @@ Once the JSON file is created and the server is restarted:
 2. **Milestone Detection:** During an adaptive quiz on the client, the `makeQuizApp` builder detects a milestone (e.g. Question 5 or a stage promotion) and hits `/conceptual-api/question?topic=<topic_id>`.
 3. **MCQ Render:** The frontend receives the question payload, recognizes the `options` array, and automatically switches the input interface from text boxes to interactive MCQ option cards with keyboard listener bindings.
 4. **Automatic Fallback:** If the JSON database is missing or empty, the frontend automatically falls back to requesting a standard calculation question for that milestone, maintaining app stability.
+
+---
+
+## Related References
+- [Design Rationale](rationale.md)
+- [Version Log](version-log.md)

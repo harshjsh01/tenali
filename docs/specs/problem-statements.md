@@ -1,5 +1,9 @@
 # Tenali Core Problem Statements
 
+> This document defines the pedagogical problem statements and research foundations guiding Tenali's development. Every educational feature or module must map directly to one or more of these problem statements.
+
+---
+
 ## Problem Statement A: Learner Motivation & Retention (Engagement)
 
 **Priority Rationale:** We observed students trying Tenali, enjoying it, but not returning. Solving engagement is the top priority because other features won't matter if learners don't come back.
@@ -49,27 +53,9 @@ Every improvement on Tenali depends on learners coming back consistently. This p
 
 **Priority Rationale:** Interface clarity affects every feature. Engagement tools, progression steps, and exercises will fail if the screen is cluttered or text-heavy.
 
-**Vision:** Show only what a learner needs at a given moment (minimal text, clean visuals, and clear focus) so mental effort goes toward understanding math rather than parsing the screen.
+**The Problem:** Many educational apps overwhelm learners with dense instructions, competing buttons, visual noise, and unnecessary clicks before the student even begins solving a problem.
 
-**The Problem:** Screens often accumulate widgets, banners, and text over time. Heavy instructions distract from the main learning task, especially for younger students or those with reading difficulties.
-
-**Why It Matters:** Any effort spent understanding a busy screen is effort taken away from learning the concept. A clean, simple UI directly supports both engagement and accessibility.
-
-**Key Design Principles:**
-- Keep one main focus or action per screen.
-- Minimize text in favor of visual patterns and intuitive icons.
-- Standardize UI components so learners do not have to learn new interface rules for every module.
+**Goal:** Present one primary interactive focus per screen, minimize decorative cognitive load, adhere to the design system tokens ([`docs/design/ui-guidelines.md`](../design/ui-guidelines.md)), and make math manipulation intuitive and immediate.
 
 **Research References:**
-- **Cognitive Load Theory (Sweller, 1988; Sweller et al., 2019):** Working memory is strictly limited. Extraneous cognitive load caused by visual clutter, complex navigation, or redundant text directly competes with the germane processing required to learn mathematical concepts.
-- **Multimedia Learning Principles (Mayer, 2009, 2021):** The Coherence and Signaling Principles demonstrate that eliminating non-essential visual elements and providing standardized, highlighted cues significantly improves learning efficiency and task completion, especially for young or struggling readers.
-
----
-
-## Summary Table
-
-| # | Problem Statement | Core Question | Depends On |
-|---|---|---|---|
-| A | Engagement | Why don't learners come back? | Foundational (Directly Observed) |
-| B | Adaptive Progression & Level Continuity | How does a learner advance smoothly between levels and recover when stuck? | Shared Mastery Data |
-| C | Minimalistic, Cognitive-Load-Aware UI | Is the interface getting in the way of learning? | UI Component Library |
+- **Cognitive Load Theory (Sweller, 1988; Mayer, 2002):** Working memory is strictly limited. Extraneous cognitive load caused by confusing UI, redundant text, or disorganized visual cues directly impairs learning schema acquisition.
