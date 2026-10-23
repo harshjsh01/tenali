@@ -1,4 +1,16 @@
-# Tenali — Complete Software Specification
+# Tenali — Complete Software Specification (v4.0 Archive)
+
+> [!NOTE] Historical Software Specification (v4.0 — April 2026)
+> This document preserves the architectural specification of Tenali v4.0 authored by Sudarshan Iyengar on April 5, 2026.
+> 
+> As the codebase evolves past 98 tiles and towards modular applications, parts of this specification reflect historical monolithic conventions (such as all client components residing inside `App.jsx` or all endpoints in `server/index.js`).
+> 
+> For active repository navigation, source-of-truth hierarchy, lock zones, and current problem statements, consult:
+> - **[`docs/map.md`](../map.md)** — Comprehensive architecture map, directory layout, and test execution matrix
+> - **[`docs/specs/problem-statements.md`](../specs/problem-statements.md)** — Core problem statements & pedagogical foundations
+> - **[`AGENTS.md`](../../AGENTS.md)** — Universal engineering guidelines and concurrency lock zones
+
+---
 
 **Version:** 4.0 | **Date:** April 5, 2026 | **Author:** Sudarshan Iyengar, IIT Ropar
 
@@ -29,7 +41,7 @@
 19. [RandomMixApp](#19-randommixapp)
 20. [CustomApp (Custom Lesson Builder)](#20-customapp)
 21. [Specialized Quiz Apps](#21-specialized-quiz-apps)
-22. [Home Component](#22-home-component)
+22: [Home Component](#22-home-component)
 23. [App Shell & Routing](#23-app-shell--routing)
 24. [modeMap — Component Registry](#24-modemap--component-registry)
 25. [regularApps — Menu Items](#25-regularapps--menu-items)
@@ -373,7 +385,7 @@ Plus system routes:
 
 ## 11. Client Architecture
 
-`client/src/App.jsx` is a single ~10,900-line React 19 file containing ALL components. Structure:
+`client/src/App.jsx` historically contained all client components (~10,900 lines at v4.0, expanded over time). Structure:
 
 1. **Constants** — `API`, `DEFAULT_TOTAL` (20), `AUTO_ADVANCE_MS` (1500)
 2. **Hooks** — `useAutoAdvance`, `useTimer`

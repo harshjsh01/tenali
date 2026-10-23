@@ -1,4 +1,10 @@
-# Plan: 2-Phase LA Quiz (Adaptive → Real-Life)
+# Plan: 2-Phase LA Quiz (Adaptive → Real-Life) [Archive]
+
+> [!NOTE] Historical Feature Implementation Plan (July 27, 2026)
+> This document preserves the historical plan for the 2-phase Linear Algebra quiz transition (Adaptive to Real-Life Applications).
+> For active repository planning and architecture, see [`docs/map.md`](../../map.md).
+
+---
 
 ## Goal
 Modify the **existing Linear Algebra module** (LinearAlgebraApp.jsx) so that
