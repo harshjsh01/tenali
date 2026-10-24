@@ -852,12 +852,12 @@ Every merged PR bumps your spot in the leaderboard 🏅
 
 ---
 
-### ⚠️ Script Safety & Specialized Tools
-- **`git-push.sh`:** Automated shell script that commits with generic messages and pushes to `origin/main`. **Do not use in contributor workflows**; use standard Git commits, verification gates, and PRs against `demo`.
-- **`check_errors.sh`:** Historical diagnostic script hardcoded to macOS paths (`/Users/...`).
-- **`setup_mongo.sh`:** macOS Homebrew-specific setup script.
-- **`test.sh`:** Specialized test script for `supermarket/SuperTables1` only.
-- For the complete testing matrix, see [`docs/map.md`](docs/map.md#4-test-execution-matrix).
+### ⚠️ Developer Utilities & Script Safety
+- **`scripts/check_errors.sh`:** Quick syntax-check of `server/index.js` and production build test of `client/`.
+- **`scripts/setup_mongo.sh`:** macOS Homebrew MongoDB setup script.
+- **`scripts/test_supertables.sh`:** Specialized sliding-window simulation script for `supermarket/SuperTables1`.
+- **`archive/scripts/dev/git-push.sh`:** Archived legacy auto-commit script. **Prohibited for automated workflows**; use standard Git commits and verification gates against `demo`.
+- For the complete repository navigation and testing matrix, see [`docs/map.md`](docs/map.md).
 
 ---
 

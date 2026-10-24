@@ -175,10 +175,10 @@ An exhaustive audit of all 44 immediate entries inside the repository root (24 f
 | **Cat B: Web Routes** | Dir | `graph/` | Prerequisite DAG visualization mounted at `/graph` | **Retained** at root (Dynamic route). |
 | **Cat B: Web Routes** | Dir | `enhanced/` | Enhanced landing page mounted at `/enhanced` | **Retained** at root (Dynamic route). |
 | **Cat B: Preserved Specs**| Dir | `supermarket/` | 45 topic specifications (mandated to preserve) | **Retained** at root. |
-| **Cat D: Developer Scripts**| File | `git-push.sh` | Shell auto-push script (modifies `App.jsx`, force pushes) | **Dangerous**: Do NOT use in automated agent runs. |
-| **Cat D: Developer Scripts**| File | `check_errors.sh` | Broken script with hardcoded macOS paths | **Retained** pending owner migration to `scripts/`. |
-| **Cat D: Developer Scripts**| File | `setup_mongo.sh` | macOS Homebrew MongoDB install utility | **Retained** pending owner migration to `scripts/`. |
-| **Cat D: Developer Scripts**| File | `test.sh` | Sliding-window simulation for `SuperTables1` | **Retained** pending owner migration to `scripts/`. |
+| **Cat D: Developer Scripts**| File | `scripts/check_errors.sh` | Syntax-checks server and builds client SPA dynamically | **Active in `scripts/`** (generalized). |
+| **Cat D: Developer Scripts**| File | `scripts/setup_mongo.sh` | macOS Homebrew MongoDB install utility | **Active in `scripts/`**. |
+| **Cat D: Developer Scripts**| File | `scripts/test_supertables.sh` | Sliding-window simulation for `SuperTables1` | **Active in `scripts/`**. |
+| **Cat D: Developer Scripts**| File | `archive/scripts/dev/git-push.sh` | Shell auto-push script (modifies `App.jsx`, force pushes) | **Archived**: Prohibited for automated agent runs. |
 | **Cat E: OS Disposable** | File | `.DS_Store` | macOS desktop metadata | **Removed** from tracking; added to `.gitignore`. |
 | **Cat F: Historical Remnant**| File | `App_ours.jsx` (5.47 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Archived** to `archive/application-snapshots/App_ours.jsx`. |
 | **Cat F: Historical Remnant**| File | `git_app.jsx` (5.52 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Archived** to `archive/application-snapshots/git_app.jsx`. |

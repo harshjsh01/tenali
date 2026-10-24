@@ -46,6 +46,7 @@ Before a human maintainer executes `git rm` on any archived item:
 | `ARC-PROTO-001` | `addition/` (34 files) | `archive/prototypes/addition/` | Directory (React+Express SPA) | Standalone prototype addition quiz client and server | Superseded by unified `client/` and `server/routes/arithmetic.js` | Confirmed none; standalone app on port 4002 | Vendor commit `4185a9fc` | Preserved with full history | Preserved for recovery / context | 2026-10-24 |
 | `ARC-PROTO-002` | `squareroot/` (33 files) | `archive/prototypes/squareroot/` | Directory (React+Express SPA) | Standalone prototype squareroot quiz client and server | Superseded by unified `client/` and `server/routes/sqrt.js` | Confirmed none; standalone app on port 4003 | Vendor commit `4185a9fc` | Preserved with full history | Preserved for recovery / context | 2026-10-24 |
 | `ARC-PROTO-003` | `chitragupta/client/`, `chitragupta/server/` (15 files) | `archive/prototypes/chitragupta/` | Directory (React+Express SPA) | Standalone prototype general knowledge quiz client and server | Superseded by unified `client/` and `server/index.js` (/gk-api) | Confirmed none; questions remain active in root `chitragupta/questions/` | Vendor commit `4185a9fc` | Preserved with full history | Preserved for recovery / context | 2026-10-24 |
+| `ARC-SCR-002` | `git-push.sh` | `archive/scripts/dev/git-push.sh` | Shell script (~1.5 KB) | Auto-commit and force-push shell utility modifying App.jsx | Dangerous; violates agent safety policies (runs `git add -A` and pushes) | Confirmed none; excluded from automated runs | Early developer convenience script | Preserved for historical context | Preserved for historical context | 2026-10-24 |
 
 ---
 
@@ -65,11 +66,10 @@ Before a human maintainer executes `git rm` on any archived item:
 - **Recovery Instructions**: Open directly as text files.
 - **Deletion Considerations**: Strong candidates for permanent removal pending maintainer sign-off.
 
-### ARC-SCR-001: Hint Injection Scratch Scripts
-- **Original Path**: `scratch/` (7 files: `cleanup.js`, `extract.js`, `extractUtils.js`, `fix_app.js`, `inject_hints.js`, `inject_xp.js`, `redesign.js`)
-- **Provenance**: Node.js scripts written to parse `App.jsx`, extract questions, and inject stepped hints into the monolithic component.
-- **Why Safe to Archive**: The hint injection was completed and committed to `App.jsx` in July 2026. The scripts are no longer run and are already listed in `.gitignore`.
-- **Recovery Instructions**: Can be run from `archive/scripts/scratch/` using `node <script_name>.js` if AST manipulation of legacy components is required.
+### ARC-SCR-001 & ARC-SCR-002: Developer Utilities & Legacy Push Scripts
+- **ARC-SCR-001**: `archive/scripts/scratch/` (7 JS files: `cleanup.js`, `extract.js`, `extractUtils.js`, `fix_app.js`, `inject_hints.js`, `inject_xp.js`, `redesign.js`). One-time AST scripts used for hint injection in July 2026.
+- **ARC-SCR-002**: `archive/scripts/dev/git-push.sh`. Early developer script that automatically cleared `.git/*.lock`, updated `App.jsx` versions using `sed`, performed `git add -A`, and force-pushed to remote. Relocated to `archive/` to prevent accidental execution by automated tooling or agents.
+- **Recovery Instructions**: Can be inspected or run from `archive/scripts/dev/git-push.sh` for reference on version bump patterns.
 
 ### ARC-MIG-001 through ARC-MIG-003: Learn Content Batch Migration Scripts
 - **Original Path**: `scripts/fix_batch_*.cjs` (7 files), `scripts/update_batch*.cjs` (8 files), `scripts/split.cjs`, `scripts/split.js`

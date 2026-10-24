@@ -1,12 +1,14 @@
 #!/bin/bash
-# git-push.sh — One-command commit & push with auto lock cleanup + version bump
+# git-push.sh — [ARCHIVED / DANGEROUS] One-command commit & push
+# WARNING: This script was moved to archive/ because it runs unverified git add -A and forces git push.
 # Usage:
 #   ./git-push.sh "your commit message"
 #   ./git-push.sh                        (uses a default message with timestamp)
 
 set -e
 
-cd "$(dirname "$0")"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+cd "$REPO_ROOT"
 
 # 1. Clean ALL stale git locks
 for lockfile in .git/index.lock .git/HEAD.lock .git/refs/heads/*.lock; do
