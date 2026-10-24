@@ -28,13 +28,14 @@ Use this skill whenever creating, modifying, relocating, or archiving documentat
   - `docs/specs/`: Pedagogical problem statements and curricula
   - `docs/features/`: Feature-specific documentation (e.g. Conceptual MCQs, Reflection Journal)
   - `docs/operations/`: Deployment topology, Nginx templates, and service guides
-  - `docs/archive/`: Superseded historical specifications and legacy session logs
+  - `archive/docs/`: Superseded historical specifications and legacy session logs
+- Central repository archive lives at root `/archive/` with canonical registry in `archive/inventory.md`.
 - Keep only root entry points (`README.md`, `CONTRIBUTING.md`, `AGENTS.md`) and package manifests at root.
 
 ### 4. Link Validation & Safe Relocation
 - Always check inbound links across the repository before moving a document.
 - When moving a file, update all relative markdown links in the same atomic commit.
-- Never delete historical records without maintainer approval; move them to `docs/archive/` and label them clearly as historical/non-authoritative.
+- Never delete historical records without maintainer approval; move them to the central `archive/` and label them clearly in `archive/inventory.md`.
 
 ---
 
