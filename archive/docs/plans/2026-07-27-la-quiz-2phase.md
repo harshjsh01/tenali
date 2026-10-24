@@ -2,7 +2,7 @@
 
 > [!NOTE] Historical Feature Implementation Plan (July 27, 2026)
 > This document preserves the historical plan for the 2-phase Linear Algebra quiz transition (Adaptive to Real-Life Applications).
-> For active repository planning and architecture, see [`docs/map.md`](../../map.md).
+> For active repository planning and architecture, see [`docs/map.md`](../../../docs/map.md).
 
 ---
 

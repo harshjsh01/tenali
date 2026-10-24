@@ -6,8 +6,8 @@
 > As the codebase evolves past 98 tiles and towards modular applications, parts of this specification reflect historical monolithic conventions (such as all client components residing inside `App.jsx` or all endpoints in `server/index.js`).
 > 
 > For active repository navigation, source-of-truth hierarchy, lock zones, and current problem statements, consult:
-> - **[`docs/map.md`](../map.md)** — Comprehensive architecture map, directory layout, and test execution matrix
-> - **[`docs/specs/problem-statements.md`](../specs/problem-statements.md)** — Core problem statements & pedagogical foundations
+> - **[`docs/map.md`](../../docs/map.md)** — Comprehensive architecture map, directory layout, and test execution matrix
+> - **[`docs/specs/problem-statements.md`](../../docs/specs/problem-statements.md)** — Core problem statements & pedagogical foundations
 > - **[`AGENTS.md`](../../AGENTS.md)** — Universal engineering guidelines and concurrency lock zones
 
 ---
