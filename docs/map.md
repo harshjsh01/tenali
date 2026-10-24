@@ -32,8 +32,16 @@ When information across the repository conflicts, resolve authority using this s
 │   ├── specs/                         # Pedagogical problem statements and learning requirements
 │   ├── design/                        # UI design system and CSS tokens
 │   ├── features/                      # Subsystem and feature specifications
-│   ├── operations/                    # Deployment topology and server configuration
-│   └── archive/                       # Historical specifications, session logs, and plans
+│   └── operations/                    # Deployment topology and server configuration
+│
+├── archive/                           # Central repository archive & master inventory
+│   ├── README.md                      # Archive policy and retention guidelines
+│   ├── inventory.md                   # Canonical archive registry & maintainer decision aid
+│   ├── application-snapshots/         # Historical App.jsx merge conflict copies
+│   ├── generated-artifacts/           # One-time JSON conflict dumps & log files
+│   ├── scripts/                       # Historical scratch tools & batch migration scripts
+│   ├── docs/                          # Superseded SRS specifications, plans, and session logs
+│   └── prototypes/                    # Standalone prototypes (addition, squareroot)
 │
 ├── client/                            # Frontend Single Page Application (React 19 + Vite 8)
 │   ├── src/
@@ -172,14 +180,14 @@ An exhaustive audit of all 44 immediate entries inside the repository root (24 f
 | **Cat D: Developer Scripts**| File | `setup_mongo.sh` | macOS Homebrew MongoDB install utility | **Retained** pending owner migration to `scripts/`. |
 | **Cat D: Developer Scripts**| File | `test.sh` | Sliding-window simulation for `SuperTables1` | **Retained** pending owner migration to `scripts/`. |
 | **Cat E: OS Disposable** | File | `.DS_Store` | macOS desktop metadata | **Removed** from tracking; added to `.gitignore`. |
-| **Cat F: Historical Remnant**| File | `App_ours.jsx` (5.47 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
-| **Cat F: Historical Remnant**| File | `git_app.jsx` (5.52 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
-| **Cat F: Historical Remnant**| File | `conflicts.json` (51 KB) | JSON conflict markers from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
-| **Cat F: Historical Remnant**| File | `git_log.txt` (20.7 KB) | UTF-16LE log dump from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
-| **Cat F: Historical Remnant**| File | `hints_injected.json` (842 B) | Hint injection output from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
-| **Cat F: Historical Remnant**| File | `extracted_batches.json` (2 B)| Empty `{}` JSON from commit `0ccbd08d` (August 2026) | **Retained**; requires owner decision to delete/archive. |
-| **Cat F: Standalone Prototype**| Dir | `scratch/` | 7 developer scripts from July 2026 hint-injection work | **Retained**; ignored in `.gitignore`. |
-| **Cat F: Standalone Prototype**| Dir | `addition/` | Legacy standalone addition prototype | **Retained** pending owner retirement/archival. |
-| **Cat F: Standalone Prototype**| Dir | `squareroot/` | Legacy standalone squareroot prototype | **Retained** pending owner retirement/archival. |
+| **Cat F: Historical Remnant**| File | `App_ours.jsx` (5.47 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Archived** to `archive/application-snapshots/App_ours.jsx`. |
+| **Cat F: Historical Remnant**| File | `git_app.jsx` (5.52 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Archived** to `archive/application-snapshots/git_app.jsx`. |
+| **Cat F: Historical Remnant**| File | `conflicts.json` (51 KB) | JSON conflict markers from commit `091fda00` (July 2026) | **Archived** to `archive/generated-artifacts/conflicts.json`. |
+| **Cat F: Historical Remnant**| File | `git_log.txt` (20.7 KB) | UTF-16LE log dump from commit `091fda00` (July 2026) | **Archived** to `archive/generated-artifacts/git_log.txt`. |
+| **Cat F: Historical Remnant**| File | `hints_injected.json` (842 B) | Hint injection output from commit `091fda00` (July 2026) | **Archived** to `archive/generated-artifacts/hints_injected.json`. |
+| **Cat F: Historical Remnant**| File | `extracted_batches.json` (2 B)| Empty `{}` JSON from commit `0ccbd08d` (August 2026) | **Archived** to `archive/generated-artifacts/extracted_batches.json`. |
+| **Cat F: Standalone Prototype**| Dir | `scratch/` | 7 developer scripts from July 2026 hint-injection work | **Archived** to `archive/scripts/scratch/`. |
+| **Cat F: Standalone Prototype**| Dir | `addition/` | Legacy standalone addition prototype | **Archived** to `archive/prototypes/addition/`. |
+| **Cat F: Standalone Prototype**| Dir | `squareroot/` | Legacy standalone squareroot prototype | **Archived** to `archive/prototypes/squareroot/`. |
 | **Cat G: Protected User Work** | Git | `main` commits | 4 division-module commits (`bae37c0d`, `1fe1e646`, etc.) | **Strictly Preserved** on local `main`. |
 | **Cat G: Protected User Work** | Git | `feat/division-fair-sharing` | Division fair-sharing feature branch | **Strictly Preserved**; zero modifications. |
