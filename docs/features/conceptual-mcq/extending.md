@@ -22,7 +22,7 @@ Identify the internal ID of the topic you want to extend. This ID corresponds to
 
 ## Step 2: Create the JSON Database File
 Create a new JSON file named `<topic_id>.json` inside the conceptual questions directory:
-📂 `server/conceptual/questions/`
+📂 `conceptual/questions/`
 
 ### JSON Structure & Schema
 Populate the file with an array of question objects following this exact schema:

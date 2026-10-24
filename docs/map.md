@@ -134,17 +134,52 @@ There is no unified root-level `npm test` script. Run tests within their respect
 
 ---
 
-## 6. Dangerous Scripts & Historical Ambiguities
+## 6. Root Directory Classification & Inventory (44 Entries)
 
-### Dangerous Root Scripts (DO NOT EXECUTE IN ATTENDED AGENT RUNS)
-- [`git-push.sh`](../git-push.sh): Deletes `.git/*.lock`, modifies `App.jsx` version with `sed`, runs `git add -A`, and pushes to remote. Strictly prohibited for automated agents.
-- [`check_errors.sh`](../check_errors.sh): Broken shell script hardcoding macOS paths to `/Users/muditagrawal/...`.
-- [`test.sh`](../test.sh): Simulates sliding window logic for `SuperTables1` only; not a repo-wide test suite.
-- [`setup_mongo.sh`](../setup_mongo.sh): macOS Homebrew-only setup script.
+An exhaustive audit of all 44 immediate entries inside the repository root (24 files + 20 directories) was completed to eliminate confusion and establish clear provenance:
 
-### Ambiguous Root Files (Retained Pending Owner Decision)
-The following files exist in the repository root and are retained pending explicit owner instructions:
-- `App_ours.jsx` (5.47 MB) & `git_app.jsx` (5.52 MB): Merge conflict remnants from commit `091fda006cf`.
-- `conflicts.json` (1.30 MB): Raw conflict dictionary.
-- `git_log.txt` (20.7 KB): UTF-16LE binary log.
-- `extracted_batches.json` (2 bytes) & `hints_injected.json` (1.1 KB): Developer scratch files.
+| Category | Type | Name | Purpose & Provenance | Status / Retention Rule |
+|---|---|---|---|---|
+| **Cat A: Root Essential** | File | `README.md` | Primary repo portal & topic catalog; auto-updated by bot | **Retained** at root. |
+| **Cat A: Root Essential** | File | `CONTRIBUTING.md` | Canonical contributor guidelines & PR rules | **Retained** at root. |
+| **Cat A: Root Essential** | File | `AGENTS.md` | Canonical universal operating policy for all AI agents | **Retained** at root. |
+| **Cat A: Root Essential** | File | `CLAUDE.md`, `GEMINI.md` | Tool-specific instruction adapters pointing to `AGENTS.md` | **Retained** at root. |
+| **Cat A: Root Essential** | File | `package.json`, `package-lock.json` | Bot manifest for `update-readme.yml` CI workflow | **Retained** at root (Red Zone). |
+| **Cat A: Root Essential** | File | `CHANGELOG.md`, `CONTRIBUTORS.md` | Generated metrics updated every 12h by GitHub Actions | **Retained** at root (Required by CI bot). |
+| **Cat A: Root Essential** | File | `.gitignore` | Git ignore specification (includes OS, logs, scratch) | **Retained** at root. |
+| **Cat A: Root Essential** | File | `.env.example` | Environment variable template for server and CompreFace | **Retained** at root. |
+| **Cat A: Root Essential** | File | `docker-compose.override.yml` | CompreFace facial recognition container configuration | **Retained** at root. |
+| **Cat A: Root Essential** | File | `render.yaml` | Render cloud deployment blueprint | **Retained** at root. |
+| **Cat A: Root Platform** | Dir | `.github/` | CI/CD workflows, PR template, issue templates, bots | **Retained** at root. |
+| **Cat A: Root Platform** | Dir | `.cursor/` | Cursor IDE agent rules pointing to `AGENTS.md` | **Retained** at root. |
+| **Cat A: Root Platform** | Dir | `.vscode/` | VS Code launch configurations (`launch.json`) | **Retained** at root. |
+| **Cat B: Core Subsystem** | Dir | `client/` | React 19 + Vite 8 frontend SPA | **Retained** at root. |
+| **Cat B: Core Subsystem** | Dir | `server/` | Express 5 backend API server & static host | **Retained** at root. |
+| **Cat B: Core Subsystem** | Dir | `docs/` | Centralized documentation hierarchy | **Retained** at root. |
+| **Cat B: Core Subsystem** | Dir | `skills/` | Canonical agent skills + curriculum bridging guides | **Retained** at root. |
+| **Cat B: Core Subsystem** | Dir | `scripts/` | Contributor bots and maintenance utilities | **Retained** at root. |
+| **Cat B: Core Subsystem** | Dir | `Ideas/` | Contributor onboarding documents | **Retained** at root. |
+| **Cat B: Runtime Data** | Dir | `vocab/` | 7,662 vocabulary questions loaded by server | **Retained** at root (Runtime data bank). |
+| **Cat B: Runtime Data** | Dir | `chitragupta/` | 991 General Knowledge questions loaded by server | **Retained** at root (Runtime data bank). |
+| **Cat B: Runtime Data** | Dir | `concept/` | Topic definitions for `/concept-api` | **Retained** at root (Runtime data bank). |
+| **Cat B: Runtime Data** | Dir | `conceptual/` | Conceptual MCQ question banks loaded by server | **Retained** at root (Runtime data bank). |
+| **Cat B: Runtime Data** | Dir | `linearalgebra/` | Matrix Mystics & LA mission quiz data bank | **Retained** at root (Runtime data bank). |
+| **Cat B: Web Routes** | Dir | `graph/` | Prerequisite DAG visualization mounted at `/graph` | **Retained** at root (Dynamic route). |
+| **Cat B: Web Routes** | Dir | `enhanced/` | Enhanced landing page mounted at `/enhanced` | **Retained** at root (Dynamic route). |
+| **Cat B: Preserved Specs**| Dir | `supermarket/` | 45 topic specifications (mandated to preserve) | **Retained** at root. |
+| **Cat D: Developer Scripts**| File | `git-push.sh` | Shell auto-push script (modifies `App.jsx`, force pushes) | **Dangerous**: Do NOT use in automated agent runs. |
+| **Cat D: Developer Scripts**| File | `check_errors.sh` | Broken script with hardcoded macOS paths | **Retained** pending owner migration to `scripts/`. |
+| **Cat D: Developer Scripts**| File | `setup_mongo.sh` | macOS Homebrew MongoDB install utility | **Retained** pending owner migration to `scripts/`. |
+| **Cat D: Developer Scripts**| File | `test.sh` | Sliding-window simulation for `SuperTables1` | **Retained** pending owner migration to `scripts/`. |
+| **Cat E: OS Disposable** | File | `.DS_Store` | macOS desktop metadata | **Removed** from tracking; added to `.gitignore`. |
+| **Cat F: Historical Remnant**| File | `App_ours.jsx` (5.47 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
+| **Cat F: Historical Remnant**| File | `git_app.jsx` (5.52 MB) | Merge conflict remnant from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
+| **Cat F: Historical Remnant**| File | `conflicts.json` (51 KB) | JSON conflict markers from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
+| **Cat F: Historical Remnant**| File | `git_log.txt` (20.7 KB) | UTF-16LE log dump from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
+| **Cat F: Historical Remnant**| File | `hints_injected.json` (842 B) | Hint injection output from commit `091fda00` (July 2026) | **Retained**; requires owner decision to delete/archive. |
+| **Cat F: Historical Remnant**| File | `extracted_batches.json` (2 B)| Empty `{}` JSON from commit `0ccbd08d` (August 2026) | **Retained**; requires owner decision to delete/archive. |
+| **Cat F: Standalone Prototype**| Dir | `scratch/` | 7 developer scripts from July 2026 hint-injection work | **Retained**; ignored in `.gitignore`. |
+| **Cat F: Standalone Prototype**| Dir | `addition/` | Legacy standalone addition prototype | **Retained** pending owner retirement/archival. |
+| **Cat F: Standalone Prototype**| Dir | `squareroot/` | Legacy standalone squareroot prototype | **Retained** pending owner retirement/archival. |
+| **Cat G: Protected User Work** | Git | `main` commits | 4 division-module commits (`bae37c0d`, `1fe1e646`, etc.) | **Strictly Preserved** on local `main`. |
+| **Cat G: Protected User Work** | Git | `feat/division-fair-sharing` | Division fair-sharing feature branch | **Strictly Preserved**; zero modifications. |
