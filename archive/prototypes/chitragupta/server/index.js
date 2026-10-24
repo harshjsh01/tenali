@@ -34,7 +34,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 4001;
 // Path to directory containing question JSON files
-const questionsDir = path.join(__dirname, '..', 'questions');
+const questionsDir = fs.existsSync(path.join(__dirname, '..', 'questions'))
+  ? path.join(__dirname, '..', 'questions')
+  : path.join(__dirname, '..', '..', '..', 'chitragupta', 'questions');
 // Path to built React frontend
 const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
 

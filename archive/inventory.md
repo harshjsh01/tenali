@@ -45,6 +45,7 @@ Before a human maintainer executes `git rm` on any archived item:
 | `ARC-DOC-003` | `docs/archive/plans/2026-07-27-la-quiz-2phase.md` | `archive/docs/plans/2026-07-27-la-quiz-2phase.md` | Markdown plan | Two-phase implementation plan for Linear Algebra quiz | Completed design plan | Confirmed none; historical only | July 2026 LA mission sprint | Non-reproducible; historical record | Preserved for historical context | 2026-10-24 |
 | `ARC-PROTO-001` | `addition/` (34 files) | `archive/prototypes/addition/` | Directory (React+Express SPA) | Standalone prototype addition quiz client and server | Superseded by unified `client/` and `server/routes/arithmetic.js` | Confirmed none; standalone app on port 4002 | Vendor commit `4185a9fc` | Preserved with full history | Preserved for recovery / context | 2026-10-24 |
 | `ARC-PROTO-002` | `squareroot/` (33 files) | `archive/prototypes/squareroot/` | Directory (React+Express SPA) | Standalone prototype squareroot quiz client and server | Superseded by unified `client/` and `server/routes/sqrt.js` | Confirmed none; standalone app on port 4003 | Vendor commit `4185a9fc` | Preserved with full history | Preserved for recovery / context | 2026-10-24 |
+| `ARC-PROTO-003` | `chitragupta/client/`, `chitragupta/server/` (15 files) | `archive/prototypes/chitragupta/` | Directory (React+Express SPA) | Standalone prototype general knowledge quiz client and server | Superseded by unified `client/` and `server/index.js` (/gk-api) | Confirmed none; questions remain active in root `chitragupta/questions/` | Vendor commit `4185a9fc` | Preserved with full history | Preserved for recovery / context | 2026-10-24 |
 
 ---
 
@@ -98,3 +99,15 @@ Before a human maintainer executes `git rm` on any archived item:
   cd archive/prototypes/addition/client && npm run dev
   ```
 - **Deletion Considerations**: Retained permanently in `archive/prototypes/` as reference implementations of early modular micro-apps.
+
+### ARC-PROTO-003: Standalone Chitragupta Prototype
+- **Original Paths**: `chitragupta/client/` (14 files), `chitragupta/server/` (1 file)
+- **Provenance**: Vendored in commit `4185a9fc` during early exploratory prototyping of the GK quiz module.
+- **Why Safe to Archive**: All 991 active question datasets remain in the root data bank `chitragupta/questions/` which `server/index.js:76` loads at startup. The standalone client and server components have been superseded by the main client SPA and unified Express server.
+- **Path Resolution in Code**: `archive/prototypes/chitragupta/server/index.js` was updated to dynamically resolve question datasets from either local `../questions` or root `chitragupta/questions/`.
+- **Recovery Instructions**: To run the prototype independently:
+  ```powershell
+  cd archive/prototypes/chitragupta/server && node index.js # runs on port 4001
+  cd archive/prototypes/chitragupta/client && npm run dev
+  ```
+- **Deletion Considerations**: Retained permanently in `archive/prototypes/` for historical reference.

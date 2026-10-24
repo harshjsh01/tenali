@@ -168,7 +168,7 @@ An exhaustive audit of all 44 immediate entries inside the repository root (24 f
 | **Cat B: Core Subsystem** | Dir | `scripts/` | Contributor bots and maintenance utilities | **Retained** at root. |
 | **Cat B: Core Subsystem** | Dir | `Ideas/` | Contributor onboarding documents | **Retained** at root. |
 | **Cat B: Runtime Data** | Dir | `vocab/` | 7,662 vocabulary questions loaded by server | **Retained** at root (Runtime data bank). |
-| **Cat B: Runtime Data** | Dir | `chitragupta/` | 991 General Knowledge questions loaded by server | **Retained** at root (Runtime data bank). |
+| **Cat B: Runtime Data** | Dir | `chitragupta/questions/` | 991 General Knowledge questions loaded by server | **Retained** at root (Runtime data bank; legacy client/server moved to `archive/prototypes/chitragupta/`). |
 | **Cat B: Runtime Data** | Dir | `concept/` | Topic definitions for `/concept-api` | **Retained** at root (Runtime data bank). |
 | **Cat B: Runtime Data** | Dir | `conceptual/` | Conceptual MCQ question banks loaded by server | **Retained** at root (Runtime data bank). |
 | **Cat B: Runtime Data** | Dir | `linearalgebra/` | Matrix Mystics & LA mission quiz data bank | **Retained** at root (Runtime data bank). |

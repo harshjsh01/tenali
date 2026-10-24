@@ -5,7 +5,7 @@ description: Use this skill whenever the user asks to add, build, scaffold, or c
 
 # IGCSE Chapter Module — pattern guide
 
-This is a project-level skill. It documents the conventions that every `/chapterN` route in `client/src/App.jsx` must follow so that new chapters look, feel, and behave identically to the ones already shipped (`/chapter5`, `/chapter6`).
+This is a project-level skill. It documents the modular conventions that every `/chapterN` lesson module in the application must follow (implemented in `client/src/apps/ChapterNApp.jsx` and mounted via `App.jsx`) so that new chapters look, feel, and behave identically to the ones already shipped (`/chapter5`, `/chapter6`).
 
 If the user asks for a new chapter, follow this guide end-to-end. If they ask for a change ("don't lock lessons", "add a slider", etc.), apply the change uniformly to *all* existing chapter modules so behaviour stays consistent.
 
@@ -188,9 +188,9 @@ The reason for the ask-first step: the user may be experimenting, may want a beh
 3. Inventory every section, exercise, and worked example. Note which exercises contain word problems.
 4. Decide on the lesson breakdown — one lesson per micro-skill, plus dedicated word-problem lessons.
 5. Author the lesson catalogue using the question kinds above. Use `\\frac{}{}`, `^N`, `\\times`, etc.
-6. Drop the new module into `client/src/App.jsx` immediately above `function App() {`, copying the helpers from `ch5_*` / `ch6_*` and renaming to `chN_*`.
-7. Wire the `/chapterN` route in `App()`.
-8. Verify with `npx esbuild src/App.jsx --bundle --loader:.jsx=jsx --jsx=automatic …` (the dev server can't always rebuild because of `dist/` permissions; esbuild bundling is the syntax check).
+6. Author the new chapter module in a dedicated standalone file at `client/src/apps/ChapterNApp.jsx` (exporting `ChapterNApp` as default), keeping helpers and lesson catalogs within that file.
+7. Wire the `/chapterN` route into `client/src/App.jsx` with a single-line import (`import ChapterNApp from './apps/ChapterNApp.jsx'`) and route branch in `App()`.
+8. Verify with `cd client && npm run build` (and `npm run lint`).
 9. Tell the user to navigate to `/chapterN`.
 
 Done.
