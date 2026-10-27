@@ -1,5 +1,4 @@
-import { test, describe } from 'node:test';
-import assert from 'node:assert/strict';
+import { describe, test, assert } from 'vitest';
 import {
   getEmotionalState,
   isFriendLocked,
@@ -7,7 +6,15 @@ import {
   isFairSharingComplete,
   giveChocolate,
   returnChocolate,
-  deriveEquation
+  deriveEquation,
+  isGroupFull,
+  isGroupOversized,
+  canMakeMoreGroups,
+  isGroupingComplete,
+  giveToGroup,
+  returnFromGroup,
+  deriveGroupingEquation,
+  isRepairSolved
 } from '../divisionLogic.js';
 
 describe('Division Equal Sharing Logic', () => {
@@ -211,6 +218,91 @@ describe('Division Equal Sharing Logic', () => {
       assert.equal(eq.formalTerms.divisor, 3);
       assert.equal(eq.formalTerms.quotient, 3);
       assert.equal(eq.formalTerms.remainder, 1);
+    });
+  });
+
+  describe('Equal Grouping (Measurement Division) Logic', () => {
+    test('isGroupFull detects target size reached', () => {
+      assert.equal(isGroupFull(2, 3), false);
+      assert.equal(isGroupFull(3, 3), true);
+      assert.equal(isGroupFull(4, 3), true);
+    });
+
+    test('isGroupOversized flags extra items', () => {
+      assert.equal(isGroupOversized(3, 3), false);
+      assert.equal(isGroupOversized(4, 3), true);
+    });
+
+    test('canMakeMoreGroups checks loose count against target size', () => {
+      assert.equal(canMakeMoreGroups(2, 3), false);
+      assert.equal(canMakeMoreGroups(3, 3), true);
+      assert.equal(canMakeMoreGroups(5, 3), true);
+    });
+
+    test('isGroupingComplete succeeds on exact grouping: 12 candies, 3 per bag -> 4 bags', () => {
+      const groups = [3, 3, 3, 3];
+      const loose = 0;
+      assert.equal(isGroupingComplete(groups, loose, 3), true);
+    });
+
+    test('isGroupingComplete succeeds with valid remainder: 11 candies, 3 per bag -> 3 bags, 2 loose', () => {
+      const groups = [3, 3, 3];
+      const loose = 2; // 2 < 3, valid remainder!
+      assert.equal(isGroupingComplete(groups, loose, 3), true);
+    });
+
+    test('isGroupingComplete rejects incomplete group if more can be made', () => {
+      const groups = [3, 3, 1];
+      const loose = 4; // can still fill the bag!
+      assert.equal(isGroupingComplete(groups, loose, 3), false);
+    });
+
+    test('isGroupingComplete rejects oversized group', () => {
+      const groups = [3, 4, 3];
+      const loose = 0;
+      assert.equal(isGroupingComplete(groups, loose, 3), false);
+    });
+
+    test('giveToGroup and returnFromGroup conserve objects', () => {
+      let groups = [0, 0];
+      let loose = 6;
+
+      const afterGive = giveToGroup(0, groups, loose);
+      assert.deepEqual(afterGive.groupCounts, [1, 0]);
+      assert.equal(afterGive.looseCount, 5);
+
+      const afterReturn = returnFromGroup(0, afterGive.groupCounts, afterGive.looseCount);
+      assert.deepEqual(afterReturn.groupCounts, [0, 0]);
+      assert.equal(afterReturn.looseCount, 6);
+    });
+
+    test('deriveGroupingEquation formats multiplication of groups correctly', () => {
+      const eq = deriveGroupingEquation(11, 3, 3, 2);
+      assert.equal(eq.equationString, '11 = 3 × 3 + 2');
+      assert.equal(eq.divisionString, '11 ÷ 3 = 3 (R 2)');
+      assert.equal(eq.formalTerms.dividend, 11);
+      assert.equal(eq.formalTerms.divisor, 3);
+      assert.equal(eq.formalTerms.quotient, 3);
+      assert.equal(eq.formalTerms.remainder, 2);
+    });
+  });
+
+  describe('Repair Unequal Groups Logic', () => {
+    test('isRepairSolved flags unequal counts as unsolved', () => {
+      assert.equal(isRepairSolved([4, 2], 0), false);
+      assert.equal(isRepairSolved([3, 3, 0], 0), false);
+    });
+
+    test('isRepairSolved validates repaired equal shares with zero remainder', () => {
+      assert.equal(isRepairSolved([3, 3], 0), true);
+    });
+
+    test('isRepairSolved validates repaired equal shares with valid remainder', () => {
+      assert.equal(isRepairSolved([2, 2, 2], 1), true); // 1 < 3 recipients
+    });
+
+    test('isRepairSolved flags unfinished round as unsolved when jar has enough to distribute', () => {
+      assert.equal(isRepairSolved([1, 1], 4), false); // 4 >= 2 recipients
     });
   });
 });

@@ -165,3 +165,111 @@ export function deriveEquation(total, friendsCount, perFriend, leftover) {
 export const giveCandy = giveChocolate;
 export const returnCandy = returnChocolate;
 
+// ============================================================================
+// GROUPING MODEL (Measurement Division — Stage 3 & Stage 4)
+// Known: total quantity, target group size.
+// Find: number of complete groups formed, and valid remainder.
+// ============================================================================
+
+/**
+ * Checks whether an individual group container has reached or exceeded target size.
+ */
+export function isGroupFull(count, targetSize) {
+  return count >= targetSize;
+}
+
+/**
+ * Checks whether a container has exceeded target size (oversized error).
+ */
+export function isGroupOversized(count, targetSize) {
+  return count > targetSize;
+}
+
+/**
+ * Checks whether another complete group can be formed from loose items.
+ */
+export function canMakeMoreGroups(looseCount, targetSize) {
+  return looseCount >= targetSize;
+}
+
+/**
+ * Validates complete grouping state:
+ * 1. Every non-empty group is filled exactly to targetSize (none oversized, none partial).
+ * 2. Remaining loose items are strictly less than targetSize (a valid remainder that cannot make another group).
+ * 3. At least one group is completed (unless total < targetSize).
+ */
+export function isGroupingComplete(groupCounts, looseCount, targetSize) {
+  if (!groupCounts || groupCounts.length === 0) return false;
+  const activeGroups = groupCounts.filter((c) => c > 0);
+  if (activeGroups.length === 0) return false;
+
+  const allActiveAreExact = activeGroups.every((c) => c === targetSize);
+  const remainderIsValid = looseCount < targetSize;
+  return allActiveAreExact && remainderIsValid;
+}
+
+/**
+ * Places one item into a group container from the loose items.
+ */
+export function giveToGroup(groupIndex, groupCounts, looseCount) {
+  if (looseCount <= 0) return null;
+  const next = [...groupCounts];
+  next[groupIndex] = (next[groupIndex] || 0) + 1;
+  return {
+    groupCounts: next,
+    looseCount: looseCount - 1
+  };
+}
+
+/**
+ * Returns an item from a group container back to the loose source.
+ */
+export function returnFromGroup(groupIndex, groupCounts, looseCount) {
+  if (!groupCounts[groupIndex] || groupCounts[groupIndex] <= 0) return null;
+  const next = [...groupCounts];
+  next[groupIndex] -= 1;
+  return {
+    groupCounts: next,
+    looseCount: looseCount + 1
+  };
+}
+
+/**
+ * Derives the visual equation representation for grouping (measurement model):
+ * Total = (Complete Groups × Group Size) + Leftover
+ */
+export function deriveGroupingEquation(total, targetSize, completeGroupsCount, leftover) {
+  return {
+    total,
+    groupSize: targetSize,
+    completeGroups: completeGroupsCount,
+    leftover,
+    equationString: `${total} = ${completeGroupsCount} × ${targetSize}${leftover > 0 ? ` + ${leftover}` : ''}`,
+    divisionString: `${total} ÷ ${targetSize} = ${completeGroupsCount}${leftover > 0 ? ` (R ${leftover})` : ''}`,
+    formalTerms: {
+      dividend: total,
+      divisor: targetSize,
+      quotient: completeGroupsCount,
+      remainder: leftover
+    }
+  };
+}
+
+// ============================================================================
+// REPAIR MODEL (Stage 5: Error Detection & Correction)
+// ============================================================================
+
+/**
+ * Validates that an unequal distribution has been repaired:
+ * - All recipient plates have equal counts > 0.
+ * - The jar has fewer items than recipients (fair distribution complete).
+ */
+export function isRepairSolved(counts, jarCount) {
+  if (!counts || counts.length === 0) return false;
+  const min = Math.min(...counts);
+  const max = Math.max(...counts);
+  const isEqual = min === max && min > 0;
+  const remainderValid = jarCount < counts.length;
+  return isEqual && remainderValid;
+}
+

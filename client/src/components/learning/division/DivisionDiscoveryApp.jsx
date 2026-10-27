@@ -5,6 +5,8 @@ import DivisionFriends from './DivisionFriends';
 import DivisionDemonstration from './DivisionDemonstration';
 import DivisionEquationView from './DivisionEquationView';
 import DivisionTerminology from './DivisionTerminology';
+import DivisionGroupingView from './DivisionGroupingView';
+import DivisionRepairView from './DivisionRepairView';
 import CandyPiece from './CandyPiece';
 import FriendAvatar from './FriendAvatar';
 import {
@@ -19,7 +21,12 @@ import {
   IconEmotion,
   IconCheck
 } from './DivisionIcons';
-import { DIVISION_DEMOS, DIVISION_ACTIVITIES } from '../../../data/divisionActivities';
+import {
+  DIVISION_DEMOS,
+  DIVISION_ACTIVITIES,
+  DIVISION_GROUPING_ACTIVITIES,
+  DIVISION_REPAIR_ACTIVITIES
+} from '../../../data/divisionActivities';
 import {
   getEmotionalState,
   isFriendLocked,
@@ -243,7 +250,7 @@ function ActivityProblemView({
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', onPointerUp);
     };
-  }, [handleGive, handleReturn]);
+  }, [handleGive, handleReturn, isFreeMode]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -437,10 +444,21 @@ function ActivityProblemView({
  * Uses high-res sprite sheet avatars and drag-and-drop distribution.
  */
 export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
+  const [activeTab, setActiveTab] = useState('sharing'); // 'sharing' | 'grouping' | 'repair' | 'terminology'
+
+  // Sharing Mode state
   const [phase, setPhase] = useState('goal');
   const [activityIdx, setActivityIdx] = useState(0);
   const [problemIdx, setProblemIdx] = useState(0);
   const [resetKey, setResetKey] = useState(0);
+
+  // Grouping Mode state
+  const [groupingActIdx, setGroupingActIdx] = useState(0);
+  const [groupingProbIdx, setGroupingProbIdx] = useState(0);
+
+  // Repair Mode state
+  const [repairActIdx, setRepairActIdx] = useState(0);
+  const [repairProbIdx, setRepairProbIdx] = useState(0);
 
   // Result snapshot for equation derivation
   const [lastResult, setLastResult] = useState({ perFriend: 0, leftover: 0 });
@@ -465,7 +483,31 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
       try {
         localStorage.setItem('tenali_division_learned', 'true');
       } catch { /* localStorage fallback */ }
-      setPhase('terminology');
+      setActiveTab('terminology');
+    }
+  };
+
+  const handleNextGroupingProblem = () => {
+    const act = DIVISION_GROUPING_ACTIVITIES[groupingActIdx];
+    if (groupingProbIdx < act.problems.length - 1) {
+      setGroupingProbIdx(prev => prev + 1);
+    } else if (groupingActIdx < DIVISION_GROUPING_ACTIVITIES.length - 1) {
+      setGroupingActIdx(prev => prev + 1);
+      setGroupingProbIdx(0);
+    } else {
+      setActiveTab('repair');
+    }
+  };
+
+  const handleNextRepairProblem = () => {
+    const act = DIVISION_REPAIR_ACTIVITIES[repairActIdx];
+    if (repairProbIdx < act.problems.length - 1) {
+      setRepairProbIdx(prev => prev + 1);
+    } else if (repairActIdx < DIVISION_REPAIR_ACTIVITIES.length - 1) {
+      setRepairActIdx(prev => prev + 1);
+      setRepairProbIdx(0);
+    } else {
+      setActiveTab('terminology');
     }
   };
 
@@ -495,150 +537,93 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
           ← Back to Home
         </button>
 
-        <div className="division-progress-pills">
-          {PILL_STEPS.map((step, idx) => (
-            <div
-              key={step.key}
-              className={`division-pill ${getPillStatus(idx)}`}
-              onClick={() => {
-                if (idx === 0) setPhase('demo');
-                else if (idx <= 4) {
-                  setActivityIdx(idx - 1);
-                  setProblemIdx(0);
-                  setPhase('activity');
-                } else {
-                  setPhase('terminology');
-                }
-              }}
-              style={{ cursor: 'pointer' }}
-              title={`Jump to ${step.label}`}
-            >
-              {step.label}
-            </div>
-          ))}
+        {/* Mode Navigation Tabs */}
+        <div className="division-mode-selector" role="tablist">
+          <button
+            role="tab"
+            aria-selected={activeTab === 'sharing'}
+            className={`division-mode-btn ${activeTab === 'sharing' ? 'active' : ''}`}
+            onClick={() => setActiveTab('sharing')}
+          >
+            🤝 Equal Sharing
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === 'grouping'}
+            className={`division-mode-btn ${activeTab === 'grouping' ? 'active' : ''}`}
+            onClick={() => setActiveTab('grouping')}
+          >
+            🎒 Equal Grouping
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === 'repair'}
+            className={`division-mode-btn ${activeTab === 'repair' ? 'active' : ''}`}
+            onClick={() => setActiveTab('repair')}
+          >
+            ⚖️ Repair Unequal
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === 'terminology'}
+            className={`division-mode-btn ${activeTab === 'terminology' ? 'active' : ''}`}
+            onClick={() => setActiveTab('terminology')}
+          >
+            📖 Division & Symbol
+          </button>
         </div>
+
+        {/* In Sharing mode, also show step pills if not on goal intro */}
+        {activeTab === 'sharing' && phase !== 'goal' && (
+          <div className="division-progress-pills">
+            {PILL_STEPS.map((step, idx) => (
+              <div
+                key={step.key}
+                className={`division-pill ${getPillStatus(idx)}`}
+                onClick={() => {
+                  if (idx === 0) setPhase('demo');
+                  else if (idx <= 4) {
+                    setActivityIdx(idx - 1);
+                    setProblemIdx(0);
+                    setPhase('activity');
+                  } else {
+                    setActiveTab('terminology');
+                  }
+                }}
+                style={{ cursor: 'pointer' }}
+                title={`Jump to ${step.label}`}
+              >
+                {step.label}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* PHASE 1: START WITH A VISUAL GOAL (NO EMOJIS, NEW SPRITES) */}
-      {phase === 'goal' && (
-        <div className="division-card division-fade-opacity" style={{ textAlign: 'center', padding: '40px 24px' }}>
-          {/* Animated Hero Illustration */}
-          <div className="division-goal-hero-graphic">
-            <div className="hero-candy-badge">
-              <CandyPiece size={48} isDragging={false} interactive={false} />
-            </div>
-            <div className="hero-arrow">
-              <IconArrowRight size={28} />
-            </div>
-            <div className="hero-friends-row">
-              <FriendAvatar characterId="rohan" emotion="happy" size={88} />
-              <FriendAvatar characterId="priya" emotion="happy" size={88} />
-              <FriendAvatar characterId="maya" emotion="happy" size={88} />
-            </div>
-          </div>
-
-          <h1 style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--clr-text, #ede8e3)', margin: '16px 0 12px' }}>
-            Fair Sharing
-          </h1>
-          <p style={{ fontSize: '1.25rem', color: 'var(--clr-accent, #e8864a)', fontWeight: 700, margin: '0 0 28px' }}>
-            Make all friends happy by sharing candies equally!
-          </p>
-
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '32px' }}>
-            <div style={{ background: 'var(--clr-surface, #362f2a)', padding: '18px 24px', borderRadius: '16px', border: '1px solid var(--clr-border, rgba(255, 245, 230, 0.18))' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
-                <IconEmotion emotion="happy" size={26} />
-                <IconEmotion emotion="happy" size={26} />
-                <IconEmotion emotion="happy" size={26} />
-              </div>
-              <div style={{ fontWeight: 700, marginTop: '8px', color: 'var(--clr-correct, #5cb87a)' }}>
-                Equal Shares = Happy Friends
-              </div>
-            </div>
-            <div style={{ background: 'var(--clr-surface, #362f2a)', padding: '18px 24px', borderRadius: '16px', border: '1px solid var(--clr-border, rgba(255, 245, 230, 0.18))' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
-                <IconLock size={20} locked={true} />
-                <IconArrowRight size={16} />
-                <IconHand size={20} />
-              </div>
-              <div style={{ fontWeight: 700, marginTop: '8px', color: 'var(--clr-accent, #e8864a)' }}>
-                One at a Time, Take Turns
-              </div>
-            </div>
-          </div>
-
-          <div className="division-controls-bar" style={{ justifyContent: 'center', gap: '16px' }}>
-            <button
-              className="division-action-btn primary"
-              style={{ fontSize: '1.15rem', padding: '14px 36px' }}
-              onClick={() => {
-                setPhase('activity');
-                setActivityIdx(0);
-                setProblemIdx(0);
-              }}
-            >
-              <IconDragHand size={22} />
-              <span>Start Drag & Drop Sharing</span>
-            </button>
-            <button
-              className="division-action-btn secondary"
-              style={{ fontSize: '1.05rem', padding: '14px 28px' }}
-              onClick={() => setPhase('demo')}
-            >
-              <span>Watch Guided Demo</span>
-              <IconArrowRight size={18} />
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* PHASE 2: GUIDED DEMONSTRATIONS */}
-      {phase === 'demo' && (
-        <DivisionDemonstration
-          demos={DIVISION_DEMOS}
-          onComplete={() => {
-            setPhase('activity');
-            setActivityIdx(0);
-            setProblemIdx(0);
-          }}
-          onSkipToInteractive={() => {
-            setPhase('activity');
-            setActivityIdx(0);
-            setProblemIdx(0);
-          }}
+      {/* RENDER BASED ON ACTIVE TAB */}
+      {activeTab === 'grouping' && (
+        <DivisionGroupingView
+          key={`grouping-${groupingActIdx}-${groupingProbIdx}`}
+          activities={DIVISION_GROUPING_ACTIVITIES}
+          activityIdx={groupingActIdx}
+          problemIdx={groupingProbIdx}
+          onNextProblem={handleNextGroupingProblem}
         />
       )}
 
-      {/* PHASE 3: INTERACTIVE ACTIVITIES (1 to 4 with Drag & Drop) */}
-      {phase === 'activity' && (
-        <ActivityProblemView
-          key={`${activityIdx}-${problemIdx}-${resetKey}`}
-          activity={currentActivity}
-          problem={currentProblem}
-          problemIdx={problemIdx}
-          onProblemDone={handleProblemDone}
-          onReset={() => setResetKey(k => k + 1)}
+      {activeTab === 'repair' && (
+        <DivisionRepairView
+          key={`repair-${repairActIdx}-${repairProbIdx}`}
+          activities={DIVISION_REPAIR_ACTIVITIES}
+          activityIdx={repairActIdx}
+          problemIdx={repairProbIdx}
+          onNextProblem={handleNextRepairProblem}
         />
       )}
 
-      {/* PHASE 4: VISUAL EQUATION DERIVATION */}
-      {phase === 'equation' && (
-        <DivisionEquationView
-          total={currentProblem.total}
-          friendsCount={currentProblem.friends}
-          perFriend={lastResult.perFriend}
-          leftover={lastResult.leftover}
-          characterIds={currentProblem.characterIds}
-          friendNames={currentProblem.friendNames}
-          activityId={currentActivity?.id}
-          onContinue={handleEquationContinue}
-        />
-      )}
-
-      {/* PHASE 5: FORMAL TERMINOLOGY REVIEW */}
-      {phase === 'terminology' && (
+      {activeTab === 'terminology' && (
         <DivisionTerminology
-          onBack={onBack}
+          onBack={() => setActiveTab('sharing')}
           onFinish={() => {
             if (onStartTest) {
               onStartTest();
@@ -647,6 +632,140 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
             }
           }}
         />
+      )}
+
+      {activeTab === 'sharing' && (
+        <>
+          {/* PHASE 1: START WITH A VISUAL GOAL (NO EMOJIS, NEW SPRITES) */}
+          {phase === 'goal' && (
+            <div className="division-card division-fade-opacity" style={{ textAlign: 'center', padding: '40px 24px' }}>
+              {/* Animated Hero Illustration */}
+              <div className="division-goal-hero-graphic">
+                <div className="hero-candy-badge">
+                  <CandyPiece size={48} isDragging={false} interactive={false} />
+                </div>
+                <div className="hero-arrow">
+                  <IconArrowRight size={28} />
+                </div>
+                <div className="hero-friends-row">
+                  <FriendAvatar characterId="rohan" emotion="happy" size={88} />
+                  <FriendAvatar characterId="priya" emotion="happy" size={88} />
+                  <FriendAvatar characterId="maya" emotion="happy" size={88} />
+                </div>
+              </div>
+
+              <h1 style={{ fontSize: '2.4rem', fontWeight: 800, color: 'var(--clr-text, #ede8e3)', margin: '16px 0 12px' }}>
+                Fair Sharing
+              </h1>
+              <p style={{ fontSize: '1.25rem', color: 'var(--clr-accent, #e8864a)', fontWeight: 700, margin: '0 0 28px' }}>
+                Make all friends happy by sharing candies equally!
+              </p>
+
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '32px' }}>
+                <div style={{ background: 'var(--clr-surface, #362f2a)', padding: '18px 24px', borderRadius: '16px', border: '1px solid var(--clr-border, rgba(255, 245, 230, 0.18))' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                    <IconEmotion emotion="happy" size={26} />
+                    <IconEmotion emotion="happy" size={26} />
+                    <IconEmotion emotion="happy" size={26} />
+                  </div>
+                  <div style={{ fontWeight: 700, marginTop: '8px', color: 'var(--clr-correct, #5cb87a)' }}>
+                    Equal Shares = Happy Friends
+                  </div>
+                </div>
+                <div style={{ background: 'var(--clr-surface, #362f2a)', padding: '18px 24px', borderRadius: '16px', border: '1px solid var(--clr-border, rgba(255, 245, 230, 0.18))' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
+                    <IconLock size={20} locked={true} />
+                    <IconArrowRight size={16} />
+                    <IconHand size={20} />
+                  </div>
+                  <div style={{ fontWeight: 700, marginTop: '8px', color: 'var(--clr-accent, #e8864a)' }}>
+                    One at a Time, Take Turns
+                  </div>
+                </div>
+              </div>
+
+              <div className="division-controls-bar" style={{ justifyContent: 'center', gap: '16px' }}>
+                <button
+                  className="division-action-btn primary"
+                  style={{ fontSize: '1.15rem', padding: '14px 36px' }}
+                  onClick={() => {
+                    setPhase('activity');
+                    setActivityIdx(0);
+                    setProblemIdx(0);
+                  }}
+                >
+                  <IconDragHand size={22} />
+                  <span>Start Drag & Drop Sharing</span>
+                </button>
+                <button
+                  className="division-action-btn secondary"
+                  style={{ fontSize: '1.05rem', padding: '14px 28px' }}
+                  onClick={() => setPhase('demo')}
+                >
+                  <span>Watch Guided Demo</span>
+                  <IconArrowRight size={18} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* PHASE 2: GUIDED DEMONSTRATIONS */}
+          {phase === 'demo' && (
+            <DivisionDemonstration
+              demos={DIVISION_DEMOS}
+              onComplete={() => {
+                setPhase('activity');
+                setActivityIdx(0);
+                setProblemIdx(0);
+              }}
+              onSkipToInteractive={() => {
+                setPhase('activity');
+                setActivityIdx(0);
+                setProblemIdx(0);
+              }}
+            />
+          )}
+
+          {/* PHASE 3: INTERACTIVE ACTIVITIES (1 to 4 with Drag & Drop) */}
+          {phase === 'activity' && (
+            <ActivityProblemView
+              key={`${activityIdx}-${problemIdx}-${resetKey}`}
+              activity={currentActivity}
+              problem={currentProblem}
+              problemIdx={problemIdx}
+              onProblemDone={handleProblemDone}
+              onReset={() => setResetKey(k => k + 1)}
+            />
+          )}
+
+          {/* PHASE 4: VISUAL EQUATION DERIVATION */}
+          {phase === 'equation' && (
+            <DivisionEquationView
+              total={currentProblem.total}
+              friendsCount={currentProblem.friends}
+              perFriend={lastResult.perFriend}
+              leftover={lastResult.leftover}
+              characterIds={currentProblem.characterIds}
+              friendNames={currentProblem.friendNames}
+              activityId={currentActivity?.id}
+              onContinue={handleEquationContinue}
+            />
+          )}
+
+          {/* PHASE 5: FORMAL TERMINOLOGY REVIEW */}
+          {phase === 'terminology' && (
+            <DivisionTerminology
+              onBack={onBack}
+              onFinish={() => {
+                if (onStartTest) {
+                  onStartTest();
+                } else {
+                  onBack();
+                }
+              }}
+            />
+          )}
+        </>
       )}
     </div>
   );
