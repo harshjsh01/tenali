@@ -22,12 +22,21 @@ export default function DivisionFriends({
   disabled = false,
   isFreeMode = false
 }) {
+  const friendsArray = Array.isArray(friends)
+    ? friends.map((f, i) => (typeof f === 'string' ? { name: f, characterId: f.toLowerCase() } : f))
+    : typeof friends === 'number'
+      ? Array.from({ length: friends }, (_, i) => ({
+          name: `Friend ${i + 1}`,
+          characterId: ['maya', 'rohan', 'priya', 'leo', 'sam'][i % 5]
+        }))
+      : [];
+
   // Enlarged friend avatars for prominent, clear expressions
-  const avatarSize = friends.length <= 2 ? 116 : (friends.length === 3 ? 106 : 96);
+  const avatarSize = friendsArray.length <= 2 ? 116 : (friendsArray.length === 3 ? 106 : 96);
 
   return (
     <div className="division-friends-container">
-      {friends.map((friend, idx) => {
+      {friendsArray.map((friend, idx) => {
         const count = counts[idx] || 0;
         const emotion = emotions[idx] || 'happy';
         const locked = !isFreeMode && isLocked ? isLocked(idx) : false;

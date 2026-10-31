@@ -38,6 +38,11 @@ export default function DivisionRepairView({
   const emotions = getEmotionalState(gameState.counts, gameState.jarCount);
   const isSolved = isRepairSolved(gameState.counts, gameState.jarCount);
 
+  const friendsList = Array.from({ length: problem.friends }, (_, i) => ({
+    name: problem.friendNames ? problem.friendNames[i] : `Friend ${i + 1}`,
+    characterId: problem.characterIds ? problem.characterIds[i] : ['maya', 'rohan', 'priya', 'leo', 'sam'][i % 5]
+  }));
+
   const handlePlateClick = (idx) => {
     // If friend was selected, move 1 candy from selected to this plate
     if (selectedFriendIdx !== null && selectedFriendIdx !== idx) {
@@ -150,15 +155,15 @@ export default function DivisionRepairView({
 
         <div className="division-friends-zone">
           <DivisionFriends
-            friends={problem.friends}
-            friendNames={problem.friendNames}
-            characterIds={problem.characterIds}
+            friends={friendsList}
             counts={gameState.counts}
             emotions={emotions}
-            isInteractive={true}
-            onPlateClick={handlePlateClick}
-            hoveredFriendIdx={null}
-            isFriendLocked={() => false}
+            isLocked={() => false}
+            onGiveCandy={handlePlateClick}
+            onReturnCandy={handleReturnToJar}
+            hoveredFriendIdx={selectedFriendIdx}
+            disabled={showCelebration}
+            isFreeMode={true}
           />
         </div>
       </div>
