@@ -14,7 +14,7 @@ import {
  * Final stage: maps intuitive equal sharing concepts to formal division terminology.
  * Completely emoji-free with SVG illustrations.
  */
-export default function DivisionTerminology({ onFinish, onBack }) {
+export default function DivisionTerminology({ onFinish, onBack, hasQuiz = false }) {
   return (
     <div className="division-card fade-in">
       <div className="division-celebration-title" style={{ marginTop: 0 }}>
@@ -101,11 +101,20 @@ export default function DivisionTerminology({ onFinish, onBack }) {
         </div>
         <div className="division-controls-bar">
           <button className="division-action-btn secondary" onClick={onBack}>
-            <span>Home Menu</span>
+            <span>Explore Activities</span>
           </button>
           <button className="division-action-btn primary" onClick={onFinish}>
-            <IconQuiz size={18} />
-            <span>Try Column Division Quiz</span>
+            {hasQuiz ? (
+              <>
+                <IconQuiz size={18} />
+                <span>Try Column Division Quiz</span>
+              </>
+            ) : (
+              <>
+                <IconCheck size={18} />
+                <span>Finish & Return to Home</span>
+              </>
+            )}
           </button>
         </div>
       </div>

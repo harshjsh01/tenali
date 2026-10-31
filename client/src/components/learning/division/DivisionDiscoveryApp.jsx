@@ -23,6 +23,7 @@ import {
   IconEmotion,
   IconCheck
 } from './DivisionIcons';
+import { addCompletedTopic } from '../../../features/progress';
 import {
   DIVISION_DEMOS,
   DIVISION_ACTIVITIES,
@@ -447,7 +448,7 @@ function ActivityProblemView({
  * Full interactive learning experience teaching division through fair sharing of candies.
  * Uses high-res sprite sheet avatars and drag-and-drop distribution.
  */
-export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
+export default function DivisionDiscoveryApp({ onBack, onStartTest, onTopicCompleted, markTopicCompleted }) {
   const [activeTab, setActiveTab] = useState('sharing'); // 'sharing' | 'grouping' | 'repair' | 'terminology'
 
   // Sharing Mode state
@@ -494,6 +495,9 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
     } else {
       try {
         localStorage.setItem('tenali_division_learned', 'true');
+        addCompletedTopic('division-discovery');
+        if (typeof markTopicCompleted === 'function') markTopicCompleted('division-discovery');
+        if (typeof onTopicCompleted === 'function') onTopicCompleted('division-discovery');
       } catch { /* localStorage fallback */ }
       setActiveTab('terminology');
     }
@@ -543,6 +547,12 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
       setLadderActIdx(prev => prev + 1);
       setLadderProbIdx(0);
     } else {
+      try {
+        localStorage.setItem('tenali_division_learned', 'true');
+        addCompletedTopic('division-discovery');
+        if (typeof markTopicCompleted === 'function') markTopicCompleted('division-discovery');
+        if (typeof onTopicCompleted === 'function') onTopicCompleted('division-discovery');
+      } catch { /* localStorage fallback */ }
       setActiveTab('terminology');
     }
   };
@@ -598,6 +608,22 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
             onClick={() => setActiveTab('repair')}
           >
             ⚖️ Repair Unequal
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === 'choice'}
+            className={`division-mode-btn ${activeTab === 'choice' ? 'active' : ''}`}
+            onClick={() => setActiveTab('choice')}
+          >
+            🎯 Choose Action
+          </button>
+          <button
+            role="tab"
+            aria-selected={activeTab === 'ladder'}
+            className={`division-mode-btn ${activeTab === 'ladder' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ladder')}
+          >
+            🪜 Quantity Ladder
           </button>
           <button
             role="tab"
@@ -679,8 +705,15 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
 
       {activeTab === 'terminology' && (
         <DivisionTerminology
+          hasQuiz={Boolean(onStartTest)}
           onBack={() => setActiveTab('sharing')}
           onFinish={() => {
+            try {
+              localStorage.setItem('tenali_division_learned', 'true');
+              addCompletedTopic('division-discovery');
+              if (typeof markTopicCompleted === 'function') markTopicCompleted('division-discovery');
+              if (typeof onTopicCompleted === 'function') onTopicCompleted('division-discovery');
+            } catch { /* completion fallback */ }
             if (onStartTest) {
               onStartTest();
             } else {
