@@ -7,6 +7,8 @@ import DivisionEquationView from './DivisionEquationView';
 import DivisionTerminology from './DivisionTerminology';
 import DivisionGroupingView from './DivisionGroupingView';
 import DivisionRepairView from './DivisionRepairView';
+import DivisionActionChoiceView from './DivisionActionChoiceView';
+import DivisionQuantityLadderView from './DivisionQuantityLadderView';
 import CandyPiece from './CandyPiece';
 import FriendAvatar from './FriendAvatar';
 import {
@@ -25,7 +27,9 @@ import {
   DIVISION_DEMOS,
   DIVISION_ACTIVITIES,
   DIVISION_GROUPING_ACTIVITIES,
-  DIVISION_REPAIR_ACTIVITIES
+  DIVISION_REPAIR_ACTIVITIES,
+  DIVISION_ACTION_CHOICE_ACTIVITIES,
+  DIVISION_QUANTITY_LADDER_ACTIVITIES
 } from '../../../data/divisionActivities';
 import {
   getEmotionalState,
@@ -460,6 +464,14 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
   const [repairActIdx, setRepairActIdx] = useState(0);
   const [repairProbIdx, setRepairProbIdx] = useState(0);
 
+  // Action Choice (Stage 6) state
+  const [choiceActIdx, setChoiceActIdx] = useState(0);
+  const [choiceProbIdx, setChoiceProbIdx] = useState(0);
+
+  // Quantity Ladder (Stage 7) state
+  const [ladderActIdx, setLadderActIdx] = useState(0);
+  const [ladderProbIdx, setLadderProbIdx] = useState(0);
+
   // Result snapshot for equation derivation
   const [lastResult, setLastResult] = useState({ perFriend: 0, leftover: 0 });
 
@@ -506,6 +518,30 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
     } else if (repairActIdx < DIVISION_REPAIR_ACTIVITIES.length - 1) {
       setRepairActIdx(prev => prev + 1);
       setRepairProbIdx(0);
+    } else {
+      setActiveTab('choice');
+    }
+  };
+
+  const handleNextActionProblem = () => {
+    const act = DIVISION_ACTION_CHOICE_ACTIVITIES[choiceActIdx];
+    if (choiceProbIdx < act.problems.length - 1) {
+      setChoiceProbIdx(prev => prev + 1);
+    } else if (choiceActIdx < DIVISION_ACTION_CHOICE_ACTIVITIES.length - 1) {
+      setChoiceActIdx(prev => prev + 1);
+      setChoiceProbIdx(0);
+    } else {
+      setActiveTab('ladder');
+    }
+  };
+
+  const handleNextLadderProblem = () => {
+    const act = DIVISION_QUANTITY_LADDER_ACTIVITIES[ladderActIdx];
+    if (ladderProbIdx < act.problems.length - 1) {
+      setLadderProbIdx(prev => prev + 1);
+    } else if (ladderActIdx < DIVISION_QUANTITY_LADDER_ACTIVITIES.length - 1) {
+      setLadderActIdx(prev => prev + 1);
+      setLadderProbIdx(0);
     } else {
       setActiveTab('terminology');
     }
@@ -618,6 +654,26 @@ export default function DivisionDiscoveryApp({ onBack, onStartTest }) {
           activityIdx={repairActIdx}
           problemIdx={repairProbIdx}
           onNextProblem={handleNextRepairProblem}
+        />
+      )}
+
+      {activeTab === 'choice' && (
+        <DivisionActionChoiceView
+          key={`choice-${choiceActIdx}-${choiceProbIdx}`}
+          activities={DIVISION_ACTION_CHOICE_ACTIVITIES}
+          activityIdx={choiceActIdx}
+          problemIdx={choiceProbIdx}
+          onNextProblem={handleNextActionProblem}
+        />
+      )}
+
+      {activeTab === 'ladder' && (
+        <DivisionQuantityLadderView
+          key={`ladder-${ladderActIdx}-${ladderProbIdx}`}
+          activities={DIVISION_QUANTITY_LADDER_ACTIVITIES}
+          activityIdx={ladderActIdx}
+          problemIdx={ladderProbIdx}
+          onNextProblem={handleNextLadderProblem}
         />
       )}
 

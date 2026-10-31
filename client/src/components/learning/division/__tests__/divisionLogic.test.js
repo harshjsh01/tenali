@@ -14,7 +14,12 @@ import {
   giveToGroup,
   returnFromGroup,
   deriveGroupingEquation,
-  isRepairSolved
+  isRepairSolved,
+  identifyProblemModel,
+  validateModelSelection,
+  validateQuantityMatch,
+  validateArrangementMatch,
+  generateDotGrid
 } from '../divisionLogic.js';
 
 describe('Division Equal Sharing Logic', () => {
@@ -303,6 +308,42 @@ describe('Division Equal Sharing Logic', () => {
 
     test('isRepairSolved flags unfinished round as unsolved when jar has enough to distribute', () => {
       assert.equal(isRepairSolved([1, 1], 4), false); // 4 >= 2 recipients
+    });
+  });
+  describe('Stage 6: Action Selection Logic', () => {
+    test('identifyProblemModel distinguishes sharing from grouping', () => {
+      assert.equal(identifyProblemModel({ total: 6, friends: 2 }), 'sharing');
+      assert.equal(identifyProblemModel({ total: 6, targetSize: 3 }), 'grouping');
+    });
+
+    test('validateModelSelection validates student choices', () => {
+      const shareProblem = { total: 8, friends: 4 };
+      const groupProblem = { total: 9, targetSize: 3 };
+
+      assert.equal(validateModelSelection('sharing', shareProblem), true);
+      assert.equal(validateModelSelection('grouping', shareProblem), false);
+
+      assert.equal(validateModelSelection('grouping', groupProblem), true);
+      assert.equal(validateModelSelection('sharing', groupProblem), false);
+    });
+  });
+
+  describe('Stage 7: Representation Ladder Logic', () => {
+    test('validateQuantityMatch matches dot count to object count', () => {
+      assert.equal(validateQuantityMatch(3, 3), true);
+      assert.equal(validateQuantityMatch(2, 3), false);
+    });
+
+    test('validateArrangementMatch distinguishes 3 groups of 2 from 2 groups of 3', () => {
+      assert.equal(validateArrangementMatch(3, 2, 3, 2), true);
+      assert.equal(validateArrangementMatch(2, 3, 3, 2), false);
+    });
+
+    test('generateDotGrid generates correct number of dot elements', () => {
+      const dots = generateDotGrid(4);
+      assert.equal(dots.length, 4);
+      assert.equal(dots[0].id, 1);
+      assert.equal(dots[3].id, 4);
     });
   });
 });

@@ -273,3 +273,71 @@ export function isRepairSolved(counts, jarCount) {
   return isEqual && remainderValid;
 }
 
+
+// ============================================================================
+// STAGE 6: ACTION SELECTION (Choose Sharing vs Grouping Model)
+// ============================================================================
+
+/**
+ * Identifies the mathematical model for an activity problem.
+ * Sharing: Known recipients (friends), discover share per friend.
+ * Grouping: Known target size, discover number of complete groups.
+ *
+ * @param {object} problem
+ * @returns {'sharing' | 'grouping'}
+ */
+export function identifyProblemModel(problem) {
+  if (!problem) return 'sharing';
+  if (problem.targetSize && !problem.friends) return 'grouping';
+  if (problem.friends) return 'sharing';
+  return 'sharing';
+}
+
+/**
+ * Validates whether the learner selected the correct model strategy for a visual problem.
+ *
+ * @param {'sharing' | 'grouping'} selectedModel
+ * @param {object} problem
+ * @returns {boolean}
+ */
+export function validateModelSelection(selectedModel, problem) {
+  return selectedModel === identifyProblemModel(problem);
+}
+
+// ============================================================================
+// STAGE 7: REPRESENTATION LADDER (Connect Actions to Quantities & Dot Patterns)
+// ============================================================================
+
+/**
+ * Validates matching an object collection to a dot card or numeral.
+ *
+ * @param {number} selectedQuantity
+ * @param {number} actualQuantity
+ * @returns {boolean}
+ */
+export function validateQuantityMatch(selectedQuantity, actualQuantity) {
+  return selectedQuantity === actualQuantity;
+}
+
+/**
+ * Validates matching an arrangement (distinguishing e.g. 3 groups of 2 from 2 groups of 3).
+ *
+ * @param {number} groups
+ * @param {number} sizePerGroup
+ * @param {number} targetGroups
+ * @param {number} targetSize
+ * @returns {boolean}
+ */
+export function validateArrangementMatch(groups, sizePerGroup, targetGroups, targetSize) {
+  return groups === targetGroups && sizePerGroup === targetSize;
+}
+
+/**
+ * Generates an array of dot items for rendering a visual dot-pattern card.
+ *
+ * @param {number} count
+ * @returns {Array<{ id: number, active: boolean }>}
+ */
+export function generateDotGrid(count) {
+  return Array.from({ length: count }, (_, i) => ({ id: i + 1, active: true }));
+}
