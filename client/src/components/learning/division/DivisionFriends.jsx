@@ -23,7 +23,7 @@ export default function DivisionFriends({
   isFreeMode = false
 }) {
   const friendsArray = Array.isArray(friends)
-    ? friends.map((f, i) => (typeof f === 'string' ? { name: f, characterId: f.toLowerCase() } : f))
+    ? friends.map((f) => (typeof f === 'string' ? { name: f, characterId: f.toLowerCase() } : f))
     : typeof friends === 'number'
       ? Array.from({ length: friends }, (_, i) => ({
           name: `Friend ${i + 1}`,
